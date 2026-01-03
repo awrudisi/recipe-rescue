@@ -25,7 +25,11 @@ export async function POST(request) {
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{
           role: 'user',
-          content: `Go to this recipe URL and extract ONLY the recipe information: ${url}
+          content: `Go to this recipe URL and extract the recipe information: ${url}
+
+CRITICAL: Each ingredient MUST include the FULL measurement/quantity. 
+- CORRECT: "1 ½ tsp Italian seasoning", "4 garlic cloves, minced", "½ cup dried red lentils"
+- WRONG: "Italian seasoning", "garlic cloves, minced", "dried red lentils"
 
 Return the response in this EXACT JSON format with no other text:
 {
@@ -33,11 +37,15 @@ Return the response in this EXACT JSON format with no other text:
   "servings": "X servings" or null,
   "prepTime": "X minutes" or null,
   "cookTime": "X minutes" or null,
-  "ingredients": ["ingredient 1", "ingredient 2"],
-  "instructions": ["Step 1 text", "Step 2 text"]
+  "ingredients": ["1 cup flour", "2 tbsp sugar", "½ tsp salt"],
+  "instructions": ["Step 1 full text", "Step 2 full text"]
 }
 
-Be thorough - get ALL ingredients and ALL steps. Keep ingredient measurements and step details intact.`
+IMPORTANT RULES:
+1. EVERY ingredient must start with a quantity (e.g., "1 cup", "2 tbsp", "½ tsp", "1 medium", "4 cloves")
+2. Include ALL ingredients - do not skip any
+3. Include ALL instruction steps - do not summarize
+4. Keep the original measurements exactly as written on the recipe page`
         }]
       })
     });
